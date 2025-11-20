@@ -7,3 +7,20 @@
 #   ["Action", "Comedy", "Drama", "Horror"].each do |genre_name|
 #     MovieGenre.find_or_create_by!(name: genre_name)
 #   end
+puts "cleaning the DB"
+Article.destroy_all
+
+require "open-uri"
+
+puts "creating articles..."
+file = URI.parse("https://upload.wikimedia.org/wikipedia/commons/thumb/8/82/NES-Console-Set.jpg/1200px-NES-Console-Set.jpg").open
+article = Article.new(title: "NES", body: "A great console")
+article.photos.attach(io: file, filename: "nes.jpg", content_type: "image/jpg")
+article.save
+
+file = File.open("app/assets/images/flowers.jpg")
+article = Article.new(title: "Table Setting", body: "Wedding table decorations")
+article.photos.attach(io: file, filename: "wedding flowers.jpg", content_type: "image/jpg")
+article.save!
+
+puts "created #{Article.count} articles"
